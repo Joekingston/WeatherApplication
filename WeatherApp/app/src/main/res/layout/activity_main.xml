@@ -127,7 +127,7 @@
                             android:id="@+id/imageView3"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:src="@drawable/humidity" />
+                            android:src="@drawable/wind" />
 
                         <TextView
                             android:id="@+id/wind_amount"

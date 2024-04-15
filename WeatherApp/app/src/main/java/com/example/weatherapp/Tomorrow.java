@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -37,6 +39,27 @@ public class Tomorrow extends AppCompatActivity {
         });
     }
 
+    //this will also need to be set as the first day after current, remove any days from recycler view that you cannot fill, or keep them as an example of what it could be. you can move this into initRecycler or whatever
+    private void setTomorrow(){
+        ImageView weatherCondition = findViewById(R.id.imageView);
+        TextView tomorrowTextView = findViewById(R.id.tomorrow);
+        TextView tempTomorrowTextView = findViewById(R.id.tempTomorrow);
+        TextView conditionTextView = findViewById(R.id.condition);
+
+        TextView rainAmountTextView = findViewById(R.id.rain_amount);
+        TextView rainTextView = findViewById(R.id.rain);
+
+        TextView windAmountTextView = findViewById(R.id.wind_amount);
+        TextView windSpeedTextView = findViewById(R.id.wind_speed);
+
+        TextView humidityAmountTextView = findViewById(R.id.humidity_amount);
+        TextView humidityTextView = findViewById(R.id.humidity);
+
+
+
+    }
+
+
     private void initRecyclerView() {
         String[] day;
         int[] tempHigh;
@@ -48,12 +71,12 @@ public class Tomorrow extends AppCompatActivity {
         //use api to get
         //examples below next 3 days
         items.add(new TomorrowSetting("Sat", "storm","Stormy",28, 24));
-        items.add(new TomorrowSetting("Sat", "storm","Stormy",28, 24));
+        items.add(new TomorrowSetting("Sun", "cloudy","cloudy",22, 21));
         items.add(new TomorrowSetting("Sat", "storm","Stormy",28, 24));
 
 
         recyclerView=findViewById(R.id.view2);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+        recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
 
         adapterTomorrow= new TomorrowAdapter(items);
         recyclerView.setAdapter(adapterTomorrow);

@@ -7,9 +7,9 @@ public class TomorrowSetting {
     private int highTemp;
     private int lowTemp;
 
-    public TomorrowSetting(String day, String picpath, String status, int highTemp, int lowTemp) {
+    public TomorrowSetting(String day, String pic, String status, int highTemp, int lowTemp) {
         this.day = day;
-        this.picPath = picpath;
+        this.picPath = pic;
         this.status = status;
         this.highTemp = highTemp;
         this.lowTemp = lowTemp;
@@ -27,8 +27,8 @@ public class TomorrowSetting {
         return picPath;
     }
 
-    public void setPicPath(String picpath) {
-        this.picPath = picpath;
+    public void setPicPath(String pic) {
+        this.picPath = pic;
     }
 
     public String getStatus() {
