@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -14,6 +15,18 @@ import java.util.ArrayList;
 public class MainActivity extends AppCompatActivity{
     private RecyclerView.Adapter adapterHourly;
     private RecyclerView recyclerView;
+
+
+    //This is where we need to put the information from the api
+    private TextView dateTextView; //current date we can include time here as well
+    private TextView weatherTypeTextView; // weather condition
+    private TextView tempTextView; //current temp
+    private TextView tempLowHighTextView;
+    private TextView rainAmountTextView;
+    private TextView windAmountTextView;
+    private TextView humidityAmountTextView;
+    //eof main weather display
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -28,7 +41,6 @@ public class MainActivity extends AppCompatActivity{
     private void setBtn() {
         Button nextButton = findViewById(R.id.nextBTN);
 
-
         nextButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -38,6 +50,8 @@ public class MainActivity extends AppCompatActivity{
         });
     }
     private void initRecyclerView() {
+
+        //This is where we can put the hourly temps and conditions, feel free to change how you feel
         String[] time;
         int[] temp;
         String[] condition;

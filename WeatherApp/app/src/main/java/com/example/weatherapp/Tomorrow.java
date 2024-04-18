@@ -17,6 +17,20 @@ import java.util.ArrayList;
 public class Tomorrow extends AppCompatActivity {
     private RecyclerView.Adapter adapterTomorrow;
     private RecyclerView recyclerView;
+
+
+//This is where we change the static tomorrow display.
+    private ImageView weatherCondition;
+    private TextView tomorrowTextView;
+    private TextView tempTomorrowTextView;
+    private TextView conditionTextView;
+    private TextView rainAmountTextView;
+    private TextView rainTextView;
+    private TextView windAmountTextView;
+    private TextView windSpeedTextView;
+    private TextView humidityAmountTextView;
+    private TextView humidityTextView;
+    //Eof static tomorrow
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,28 +53,33 @@ public class Tomorrow extends AppCompatActivity {
         });
     }
 
-    //this will also need to be set as the first day after current, remove any days from recycler view that you cannot fill, or keep them as an example of what it could be. you can move this into initRecycler or whatever
+    //this will also need to be set as the first day after current aka tomorrow, remove any extra days from recycler view that you cannot fill,
+    // or keep them as an example of what it could be. you can move this into initRecycler or whatever
+
     private void setTomorrow(){
-        ImageView weatherCondition = findViewById(R.id.imageView);
-        TextView tomorrowTextView = findViewById(R.id.tomorrow);
-        TextView tempTomorrowTextView = findViewById(R.id.tempTomorrow);
-        TextView conditionTextView = findViewById(R.id.condition);
+        weatherCondition = findViewById(R.id.imageView);
+        tomorrowTextView = findViewById(R.id.tomorrow);
+        tempTomorrowTextView = findViewById(R.id.tempTomorrow);
+        conditionTextView = findViewById(R.id.condition);
 
-        TextView rainAmountTextView = findViewById(R.id.rain_amount);
-        TextView rainTextView = findViewById(R.id.rain);
+        rainAmountTextView = findViewById(R.id.rain_amount);
+        rainTextView = findViewById(R.id.rain);
 
-        TextView windAmountTextView = findViewById(R.id.wind_amount);
-        TextView windSpeedTextView = findViewById(R.id.wind_speed);
+        windAmountTextView = findViewById(R.id.wind_amount);
+        windSpeedTextView = findViewById(R.id.wind_speed);
 
-        TextView humidityAmountTextView = findViewById(R.id.humidity_amount);
-        TextView humidityTextView = findViewById(R.id.humidity);
+        humidityAmountTextView = findViewById(R.id.humidity_amount);
+        humidityTextView = findViewById(R.id.humidity);
 
 
 
     }
 
-
+// recycler view allows to dynamically create objects onto the display.
     private void initRecyclerView() {
+
+        // you can put the api for the dynamic view here. if you prefer to use multiple strings instead of arrays feel free.
+        // these are just examples to show
         String[] day;
         int[] tempHigh;
         int[] tempLow;
@@ -68,15 +87,18 @@ public class Tomorrow extends AppCompatActivity {
         String[] picPath;
 
         ArrayList<TomorrowSetting> items=new ArrayList<>();
+
         //use api to get
-        //examples below next 3 days
-        items.add(new TomorrowSetting("Sat", "storm","Stormy",28, 24));
-        items.add(new TomorrowSetting("Sun", "cloudy","cloudy",22, 21));
-        items.add(new TomorrowSetting("Sat", "storm","Stormy",28, 24));
+        //examples below next 3 days (day after tomorrow and forwards)
+        items.add(new TomorrowSetting("Sat", "storm","Stormy",28, 24)); // these two would need values replaced.
+        items.add(new TomorrowSetting("Sun", "cloudy","EXAMPLE",22, 21));
+
+
+        items.add(new TomorrowSetting("Sat", "storm","EXAMPLE",28, 24)); // this can be kept in to fill space and make app nicer. because were stuck to three days this wont be registered
 
 
         recyclerView=findViewById(R.id.view2);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
+        recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)); // vertical allows for stacking of elements
 
         adapterTomorrow= new TomorrowAdapter(items);
         recyclerView.setAdapter(adapterTomorrow);
