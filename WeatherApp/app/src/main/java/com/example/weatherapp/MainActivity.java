@@ -10,6 +10,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.weatherapp.hourlyForecast.HourlyForecastPOJO;
+
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity{
@@ -58,6 +60,16 @@ public class MainActivity extends AppCompatActivity{
 
         ArrayList<Hourly> items=new ArrayList<>();
         //use api to get hour temp and condition which will be used for the appropriate image
+
+        //TODO this is a test to make sure the basic API call functions as intended, will replace with hourly forecast call
+
+        HourlyForecastPOJO hourlyForecastPOJO = null;
+        String weatherLocation = "Toronto";
+        new GetHourlyForecastTask().execute(weatherLocation);
+
+        //TODO this is a test to make sure the basic API call functions as intended, will replace with hourly forecast call
+
+
         //examples below
         items.add(new Hourly("10 pm", 28, "cloudy"));
         items.add(new Hourly("11 pm", 28, "sunny"));
