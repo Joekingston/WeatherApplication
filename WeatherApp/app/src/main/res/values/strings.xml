@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">WeatherApp</string>
+
+
+    <!-- I know this is bad practice, I would not include a plaintext API key in the working world -->
+    <string name="weather_api_key">8f69645c60a54f8094d200702241103</string>
 </resources>
