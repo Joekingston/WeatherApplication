@@ -85,6 +85,8 @@ public class MainActivity extends AppCompatActivity{
         ArrayList<Hourly> items=new ArrayList<>();
         //use api to get hour temp and condition which will be used for the appropriate image
 
+        //Assuming initRecyclerView is called from the onPostExecute method, this value will be null
+        //if creation of the POJO failed.
         if (hourlyForecastPOJO != null) {
 
             //TODO this is where we set values for today's weather
@@ -97,6 +99,8 @@ public class MainActivity extends AppCompatActivity{
 
 
         }
+
+        //TODO add error handling in the event that hourlyForecastPOJO is null (i.e. the API call fails)
 
 
         //examples below
@@ -114,7 +118,9 @@ public class MainActivity extends AppCompatActivity{
 
     }
 
-
+    //This method takes a string with the location (either lat/long or name of city) and makes an API
+    //call to get the 1 day forecast for that location. If it receives a valid response, it calls another
+    //async task onPostExecute to convert the JSON response to a POJO
     public class GetHourlyForecastTask extends AsyncTask<String, Void, String> {
 
         @Override
@@ -161,6 +167,8 @@ public class MainActivity extends AppCompatActivity{
         }
     }
 
+    //This method converts the JSON response to a POJO. If successful, it calls the initRecyclerView method
+    //to populate the UI with values retrieved from the weather API
     public class JsonToHourlyForecastPOJO extends AsyncTask<String, Void, HourlyForecastPOJO> {
         @Override
         protected HourlyForecastPOJO doInBackground (String... args) {
@@ -182,8 +190,6 @@ public class MainActivity extends AppCompatActivity{
             if (hourlyForecast != null) {
                 Log.d("DEBUG", "HourlyForecastPOJO object successfully created");
             }
-
-            // TODO need to implement function to update recycler view and call it here
             initRecyclerView(hourlyForecast);
         }
     }
