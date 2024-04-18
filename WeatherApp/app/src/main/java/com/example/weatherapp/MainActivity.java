@@ -1,7 +1,9 @@
 package com.example.weatherapp;
 
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -11,7 +13,16 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.weatherapp.hourlyForecast.HourlyForecastPOJO;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.lang.reflect.Type;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity{
@@ -34,7 +45,17 @@ public class MainActivity extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        initRecyclerView();
+        dateTextView = findViewById(R.id.date);
+        weatherTypeTextView = findViewById(R.id.weather_type);
+        tempTextView = findViewById(R.id.temp);
+        tempLowHighTextView = findViewById(R.id.temp_low_high);
+        rainAmountTextView = findViewById(R.id.rain_amount);
+        windAmountTextView = findViewById(R.id.wind_amount);
+        humidityAmountTextView = findViewById(R.id.humidity_amount);
+
+        //API call to get weather data and initialize recycler view
+        String weatherLocation = "Toronto"; //TODO replace with lat/long for current location
+        new GetHourlyForecastTask().execute(weatherLocation);
 
         setBtn();
 
@@ -51,7 +72,7 @@ public class MainActivity extends AppCompatActivity{
 
         });
     }
-    private void initRecyclerView() {
+    private void initRecyclerView(HourlyForecastPOJO hourlyForecastPOJO) {
 
         //This is where we can put the hourly temps and conditions, feel free to change how you feel
         String[] time;
@@ -61,13 +82,18 @@ public class MainActivity extends AppCompatActivity{
         ArrayList<Hourly> items=new ArrayList<>();
         //use api to get hour temp and condition which will be used for the appropriate image
 
-        //TODO this is a test to make sure the basic API call functions as intended, will replace with hourly forecast call
+        if (hourlyForecastPOJO != null) {
 
-        HourlyForecastPOJO hourlyForecastPOJO = null;
-        String weatherLocation = "Toronto";
-        new GetHourlyForecastTask().execute(weatherLocation);
+            //TODO this is where we set values for today's weather
 
-        //TODO this is a test to make sure the basic API call functions as intended, will replace with hourly forecast call
+            dateTextView.setText(String.valueOf(hourlyForecastPOJO.getLocation().getLocaltime()));
+
+
+            //TODO assign values for recycler view here as well, don't want to dereference a null object
+
+
+
+        }
 
 
         //examples below
@@ -83,6 +109,80 @@ public class MainActivity extends AppCompatActivity{
         adapterHourly= new HourlyAdapter(items);
         recyclerView.setAdapter(adapterHourly);
 
+    }
+
+
+    public class GetHourlyForecastTask extends AsyncTask<String, Void, String> {
+
+        @Override
+        protected String doInBackground(String... args) {
+            String response = "API request failed"; //default response
+            String apiKey = "4f610bcb4971498bbd024107240703"; //TODO hardcoded until I find a way to deal with this bullshit
+            
+            try {
+                URL url = new URL("https://api.weatherapi.com/v1/forecast.json?key=" + apiKey + "&q=" + args[0] + "&days=1&aqi=no&alerts=no");
+                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+                connection.setRequestMethod("GET");
+                int httpResponseCode = connection.getResponseCode();
+
+                if (httpResponseCode == HttpURLConnection.HTTP_OK) {
+                    //save response to string if return code is 200 OK
+                    BufferedReader input = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+                    String inputLine;
+                    StringBuilder responseBuilder = new StringBuilder();
+                    while ((inputLine = input.readLine()) != null) {
+                        responseBuilder.append(inputLine);
+                    }
+                    input.close();
+                    response = responseBuilder.toString();
+                    Log.d("DEBUG", "doInBackground: " + response);
+                } else {
+                    response = "API request failed";
+                    Log.d("DEBUG", response);
+                }
+            }
+            catch (MalformedURLException e) {
+                Log.d("DEBUG", "Malformed URL Exception: " + e);
+            } catch (IOException e) {
+                Log.d("DEBUG", "IO Exception: " + e);
+            }
+            return response;
+        }
+
+        @Override
+        protected void onPostExecute(String response) {
+            super.onPostExecute(response);
+            if (response.equals("API request failed") == false ) {
+                new JsonToHourlyForecastPOJO().execute(response);
+            }
+        }
+    }
+
+    public class JsonToHourlyForecastPOJO extends AsyncTask<String, Void, HourlyForecastPOJO> {
+        @Override
+        protected HourlyForecastPOJO doInBackground (String... args) {
+            Gson gson = new Gson();
+            HourlyForecastPOJO hourlyForecastPOJO = null;
+            Type type = new TypeToken<HourlyForecastPOJO>(){}.getType();
+            try {
+                hourlyForecastPOJO = gson.fromJson(args[0], type);
+            }
+            catch(Exception e) {
+                Log.e("ERROR", "Error converting JSON string to object");
+            }
+            return hourlyForecastPOJO;
+        }
+
+        @Override
+        protected void onPostExecute(HourlyForecastPOJO hourlyForecast) {
+            super.onPostExecute(hourlyForecast);
+            if (hourlyForecast != null) {
+                Log.d("DEBUG", "HourlyForecastPOJO object successfully created");
+            }
+
+            // TODO need to implement function to update recycler view and call it here
+            initRecyclerView(hourlyForecast);
+        }
     }
 
 }
