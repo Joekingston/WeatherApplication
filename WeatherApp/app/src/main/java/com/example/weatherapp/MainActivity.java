@@ -53,6 +53,9 @@ public class MainActivity extends AppCompatActivity{
         windAmountTextView = findViewById(R.id.wind_amount);
         humidityAmountTextView = findViewById(R.id.humidity_amount);
 
+        //get location
+
+
         //API call to get weather data and initialize recycler view
         String weatherLocation = "Toronto"; //TODO replace with lat/long for current location
         new GetHourlyForecastTask().execute(weatherLocation);
