@@ -1,11 +1,13 @@
 package com.example.weatherapp;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -24,6 +26,7 @@ import java.lang.reflect.Type;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,6 +36,7 @@ public class MainActivity extends AppCompatActivity{
 
 
     //This is where we need to put the information from the api
+    private ImageView weatherCondition;
     private TextView dateTextView; //current date we can include time here as well
     private TextView weatherTypeTextView; // weather condition
     private TextView tempTextView; //current temp
@@ -40,6 +44,7 @@ public class MainActivity extends AppCompatActivity{
     private TextView rainAmountTextView;
     private TextView windAmountTextView;
     private TextView humidityAmountTextView;
+    private TextView location;
     //eof main weather display
 
     @Override
@@ -54,7 +59,8 @@ public class MainActivity extends AppCompatActivity{
         rainAmountTextView = findViewById(R.id.rain_amount);
         windAmountTextView = findViewById(R.id.wind_amount);
         humidityAmountTextView = findViewById(R.id.humidity_amount);
-
+        weatherCondition = findViewById(R.id.imageView);
+        location = findViewById(R.id.location);
         //get location
 
 
@@ -137,6 +143,7 @@ public class MainActivity extends AppCompatActivity{
 
         });
     }
+    @SuppressLint("SetTextI18n")
     private void initRecyclerView(ThreeDayForecastPOJO threeDayForecastPOJO) {
 
         //This is where we can put the hourly temps and conditions, feel free to change how you feel
@@ -151,25 +158,52 @@ public class MainActivity extends AppCompatActivity{
         //if creation of the POJO failed.
         if (threeDayForecastPOJO != null) {
 
-            //Set values for current weather
-            dateTextView.setText(String.valueOf(threeDayForecastPOJO.getLocation().getLocaltime()));
-            weatherTypeTextView.setText(String.valueOf(threeDayForecastPOJO.getForecast().getForecastday().get(0).getDay().getCondition().getText()));
-            tempTextView.setText(String.valueOf(threeDayForecastPOJO.getForecast().getForecastday().get(0).getDay().getAvgtempC()));
-            humidityAmountTextView.setText(String.format("%s%%", (threeDayForecastPOJO.getCurrent().getHumidity())));
-            rainAmountTextView.setText(String.format("%s mm", (threeDayForecastPOJO.getCurrent().getPrecipMm())));
-            windAmountTextView.setText(String.format("%s km/h", (threeDayForecastPOJO.getCurrent().getWindKph())));
 
-            Double maxTemp = threeDayForecastPOJO.getForecast().getForecastday().get(0).getDay().getMaxtempC();
-            Double minTemp = threeDayForecastPOJO.getForecast().getForecastday().get(0).getDay().getMintempC();
-            tempLowHighTextView.setText(String.format("H:%.0f L:%.0f", maxTemp, minTemp));
 
             //set values for recycler view
+            LocalDateTime now = null;
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+                now = LocalDateTime.now();
+            }
+            int currentHour = 0;
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+                currentHour = now.getHour();
+            }
+
+            int startIndex = -1;
             for (int i = 0; i < threeDayForecastPOJO.getForecast().getForecastday().get(0).getHour().size(); i++) {
                 String itemHour = threeDayForecastPOJO.getForecast().getForecastday().get(0).getHour().get(i).getTime();
-                Double itemTemp = threeDayForecastPOJO.getForecast().getForecastday().get(0).getHour().get(i).getTempC();
-                //TODO get weather code
+                int hour = Integer.parseInt(itemHour.substring(11, 13)); // Extract hour from the time string
+                if (hour >= currentHour) {
+                    startIndex = i;
+                    break;
+                }
+            }
+            if (startIndex != -1) {            //Set values for current weather
+                dateTextView.setText(String.valueOf(threeDayForecastPOJO.getLocation().getLocaltime()));
+                weatherTypeTextView.setText(String.valueOf(threeDayForecastPOJO.getForecast().getForecastday().get(0).getDay().getCondition().getText()));
+                tempTextView.setText(String.valueOf(threeDayForecastPOJO.getForecast().getForecastday().get(0).getHour().get(startIndex).getTempC())+"°");
+                humidityAmountTextView.setText(String.format("%s%%", (threeDayForecastPOJO.getCurrent().getHumidity())));
+                rainAmountTextView.setText(String.format("%s mm", (threeDayForecastPOJO.getCurrent().getPrecipMm())));
+                windAmountTextView.setText(String.format("%s km/h", (threeDayForecastPOJO.getCurrent().getWindKph())));
+                location.setText(String.format("Location: %s", (threeDayForecastPOJO.getLocation().getName())));
                 String weatherCode = setCondition(threeDayForecastPOJO.getForecast().getForecastday().get(0).getDay().getCondition().getCode());
-                items.add(new Hourly(itemHour, itemTemp.intValue(), weatherCode));
+                int resourceId = getResources().getIdentifier(weatherCode, "drawable", getPackageName());
+                weatherCondition.setImageResource(resourceId);
+                Double maxTemp = threeDayForecastPOJO.getForecast().getForecastday().get(0).getDay().getMaxtempC();
+                Double minTemp = threeDayForecastPOJO.getForecast().getForecastday().get(0).getDay().getMintempC();
+                tempLowHighTextView.setText(String.format("H:%.0f L:%.0f", maxTemp, minTemp));
+                startIndex++;
+                int j = 0;
+                for (int i = 0; i < 5; i++) {
+                    if (startIndex > 24) j = 1;
+                    String itemHour = threeDayForecastPOJO.getForecast().getForecastday().get(j).getHour().get(startIndex).getTime();
+                    Double itemTemp = threeDayForecastPOJO.getForecast().getForecastday().get(j).getHour().get(startIndex).getTempC();
+                    //TODO get weather code
+                    weatherCode = setCondition(threeDayForecastPOJO.getForecast().getForecastday().get(j).getDay().getCondition().getCode());
+                    items.add(new Hourly(itemHour, itemTemp.intValue(), weatherCode));
+                    startIndex++;
+                }
             }
 
         }
