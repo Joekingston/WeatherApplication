@@ -198,19 +198,21 @@ public class Tomorrow extends AppCompatActivity {
 
         //use api to get
         //examples below next 3 days (day after tomorrow and forwards)
-        for (int i = 0; i < threeDayForecastPOJO.getForecast().getForecastday().size(); i++) {
+        for (int i = 2; i < threeDayForecastPOJO.getForecast().getForecastday().size(); i++) {
             String itemDay = threeDayForecastPOJO.getForecast().getForecastday().get(i).getDate(); //TODO parse out day of week from
             String dayOfWeek = UtilityFuncs.ConvertDateToDayOfWeek(itemDay);
+
+            //get weather code
+            String weatherCode = setCondition(threeDayForecastPOJO.getForecast().getForecastday().get(i).getDay().getCondition().getCode());
+
+            Double maxTemp = threeDayForecastPOJO.getForecast().getForecastday().get(i).getDay().getMaxtempC();
+            Double minTemp = threeDayForecastPOJO.getForecast().getForecastday().get(i).getDay().getMintempC();
+            items.add(new TomorrowSetting(itemDay, weatherCode, weatherCode, maxTemp.intValue(), minTemp.intValue()));
         }
 
-
-
-
-        items.add(new TomorrowSetting("Sat", "storm","Stormy",28, 24)); // these two would need values replaced.
-        items.add(new TomorrowSetting("Sun", "cloudy","EXAMPLE",22, 21));
-
-
-        items.add(new TomorrowSetting("Sat", "storm","EXAMPLE",28, 24)); // this can be kept in to fill space and make app nicer. because were stuck to three days this wont be registered
+        //Hardcoded filler items
+        items.add(new TomorrowSetting("2024-04-22", "cloudy","cloudy",22, 21));
+        items.add(new TomorrowSetting("2024-04-23", "storm","storm",25, 24)); // this can be kept in to fill space and make app
 
 
         recyclerView=findViewById(R.id.view2);
@@ -288,7 +290,11 @@ public class Tomorrow extends AppCompatActivity {
             if (threeDayForecast != null) {
                 Log.d("DEBUG", "ThreeDayForecastPOJO object successfully created");
             }
-            initRecyclerView(threeDayForecast);
+            try {
+                initRecyclerView(threeDayForecast);
+            } catch (ParseException e) {
+                throw new RuntimeException(e);
+            }
         }
     }
 
