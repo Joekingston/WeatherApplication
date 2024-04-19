@@ -33,7 +33,8 @@ import java.net.URL;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Locale;
-
+// Name: Tomorrow
+// Purpose: Activity class responsible for displaying weather forecast for the next few days
 public class Tomorrow extends AppCompatActivity {
     private RecyclerView.Adapter adapterTomorrow;
     private RecyclerView recyclerView;
@@ -51,6 +52,10 @@ public class Tomorrow extends AppCompatActivity {
     private TextView humidityAmountTextView;
     private TextView humidityTextView;
     //Eof static tomorrow
+
+// Name: Tomorrow constructor
+// Purpose: Initializes the activity with the layout and sets up views for displaying weather information
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -65,6 +70,8 @@ public class Tomorrow extends AppCompatActivity {
         setBtn();
 
     }
+// Name: setBtn
+// Purpose: Sets up a button click listener to navigate back to the MainActivity when clicked
 
     private void setBtn() {
         ConstraintLayout backButton = findViewById(R.id.back_Btn);
@@ -79,8 +86,8 @@ public class Tomorrow extends AppCompatActivity {
 
 
 
-    //this will also need to be set as the first day after current aka tomorrow, remove any extra days from recycler view that you cannot fill,
-    // or keep them as an example of what it could be. you can move this into initRecycler or whatever
+// Name: setTomorrow
+// Purpose: Initializes views for displaying tomorrow's weather information
 
     private void setTomorrow(){
         weatherCondition = findViewById(R.id.imageView);
@@ -97,7 +104,11 @@ public class Tomorrow extends AppCompatActivity {
         humidityAmountTextView = findViewById(R.id.humidity_amount);
         humidityTextView = findViewById(R.id.humidity);
 
-    }
+    }// Name: setCondition
+// Purpose: Returns a weather condition based on the provided weather code
+// Params: code - The code representing the weather condition
+// Returns: A string representing the weather condition
+
     private String setCondition(long code){
         switch ((int) code) {
             case 1000:
@@ -159,7 +170,10 @@ public class Tomorrow extends AppCompatActivity {
         }
 
     }
-// recycler view allows to dynamically create objects onto the display.
+// Name: initRecyclerView
+// Purpose: Initializes the RecyclerView with TomorrowSetting items and sets up data for the weather forecast
+// Params: threeDayForecastPOJO - The ThreeDayForecastPOJO object containing weather data
+
     private void initRecyclerView(ThreeDayForecastPOJO threeDayForecastPOJO) throws ParseException {
 
         // you can put the api for the dynamic view here. if you prefer to use multiple strings instead of arrays feel free.
@@ -195,9 +209,6 @@ public class Tomorrow extends AppCompatActivity {
 
 
 
-        //TODO add error handling in the event that threeDayForecastPOJO is null (i.e. the API call fails)
-
-
         //use api to get
         //examples below next 3 days (day after tomorrow and forwards)
         for (int i = 2; i < threeDayForecastPOJO.getForecast().getForecastday().size(); i++) {
@@ -226,8 +237,16 @@ public class Tomorrow extends AppCompatActivity {
         recyclerView.setAdapter(adapterTomorrow);
 
     }
+// Name: GetThreeDayForecastTask
+// Purpose: AsyncTask to make an API request to get the three-day forecast data
+// Params: args - An array of strings representing the location for which the forecast is requested
+// Returns: A string representing the API response
 
     public class GetThreeDayForecastTask extends AsyncTask<String, Void, String> {
+// Name: doInBackground (in GetThreeDayForecastTask)
+// Purpose: Performs the API request in the background
+// Params: args - An array of strings representing the location for which the forecast is requested
+// Returns: A string representing the API response
 
         @Override
         protected String doInBackground(String... args) {
@@ -263,6 +282,9 @@ public class Tomorrow extends AppCompatActivity {
             }
             return response;
         }
+// Name: onPostExecute (in GetThreeDayForecastTask)
+// Purpose: Processes the API response and initiates conversion to ThreeDayForecastPOJO
+// Params: response - The API response string
 
         @Override
         protected void onPostExecute(String response) {
@@ -272,8 +294,18 @@ public class Tomorrow extends AppCompatActivity {
             }
         }
     }
+// Name: JsonToThreeDayForecastPOJO
+// Purpose: AsyncTask to convert the JSON response to ThreeDayForecastPOJO object
+// Returns: A ThreeDayForecastPOJO object
+// Params: args - An array of strings representing the JSON response from the API
 
     public class JsonToThreeDayForecastPOJO extends AsyncTask<String, Void, ThreeDayForecastPOJO> {
+
+// Name: doInBackground (in JsonToThreeDayForecastPOJO
+// Purpose: Converts the JSON response to a ThreeDayForecastPOJO object in the background
+// Params: args - An array of strings representing the JSON response from the API
+// Returns: A ThreeDayForecastPOJO object
+
         @Override
         protected ThreeDayForecastPOJO doInBackground (String... args) {
             Gson gson = new Gson();
@@ -287,7 +319,9 @@ public class Tomorrow extends AppCompatActivity {
             }
             return threeDayForecastPOJO;
         }
-
+// Name: onPostExecute (in JsonToThreeDayForecastPOJO)
+// Purpose: Processes the converted ThreeDayForecastPOJO object and initializes the RecyclerView
+// Params: threeDayForecast - The ThreeDayForecastPOJO object containing weather data
         @Override
         protected void onPostExecute(ThreeDayForecastPOJO threeDayForecast) {
             super.onPostExecute(threeDayForecast);

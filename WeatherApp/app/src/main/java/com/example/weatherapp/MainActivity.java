@@ -29,7 +29,8 @@ import java.net.URL;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-
+// Name: MainActivity
+// Purpose: Main activity class responsible for displaying weather information and initializing RecyclerView
 public class MainActivity extends AppCompatActivity{
     private RecyclerView.Adapter adapterHourly;
     private RecyclerView recyclerView;
@@ -46,6 +47,8 @@ public class MainActivity extends AppCompatActivity{
     private TextView humidityAmountTextView;
     private TextView location;
     //eof main weather display
+    // Name: MainActivity constructor
+    // Purpose: Initializes the activity with the layout and sets up views for displaying weather information
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,6 +74,10 @@ public class MainActivity extends AppCompatActivity{
         setBtn();
 
     }
+    // Name: setCondition
+    // Purpose: Returns a weather condition based on the provided weather code
+    // Params: code - The code representing the weather condition
+    // Returns: A string representing the weather condition
     private String setCondition(long code){
         switch ((int) code) {
             case 1000:
@@ -132,6 +139,8 @@ public class MainActivity extends AppCompatActivity{
         }
 
     }
+    // Name: setBtn
+    // Purpose: Sets up a button click listener to navigate to the Tomorrow activity when clicked
     private void setBtn() {
         Button nextButton = findViewById(R.id.nextBTN);
 
@@ -143,6 +152,9 @@ public class MainActivity extends AppCompatActivity{
 
         });
     }
+    // Name: initRecyclerView
+    // Purpose: Initializes the RecyclerView with Hourly items and sets up data for the current weather
+    // Params: threeDayForecastPOJO - The ThreeDayForecastPOJO object containing weather data
     @SuppressLint("SetTextI18n")
     private void initRecyclerView(ThreeDayForecastPOJO threeDayForecastPOJO) {
 
@@ -223,11 +235,15 @@ public class MainActivity extends AppCompatActivity{
 
     }
 
-    //This method takes a string with the location (either lat/long or name of city) and makes an API
-    //call to get the 1 day forecast for that location. If it receives a valid response, it calls another
-    //async task onPostExecute to convert the JSON response to a POJO
+    // Name: GetThreeDayForecastTask
+    // Purpose: AsyncTask to make an API request to get the three-day forecast data
+    // Params: args - An array of strings representing the location for which the forecast is requested
+    // Returns: A string representing the API response
     public class GetThreeDayForecastTask extends AsyncTask<String, Void, String> {
-
+        // Name: doInBackground (in GetThreeDayForecastTask)
+        // Purpose: Performs the API request in the background
+        // Params: args - An array of strings representing the location for which the forecast is requested
+        // Returns: A string representing the API response
         @Override
         protected String doInBackground(String... args) {
             String response = "API request failed"; //default response
@@ -262,7 +278,9 @@ public class MainActivity extends AppCompatActivity{
             }
             return response;
         }
-
+        // Name: onPostExecute (in GetThreeDayForecastTask)
+        // Purpose: Processes the API response and initiates conversion to ThreeDayForecastPOJO
+        // Params: response - The API response string
         @Override
         protected void onPostExecute(String response) {
             super.onPostExecute(response);
@@ -271,8 +289,15 @@ public class MainActivity extends AppCompatActivity{
             }
         }
     }
-
+    // Name: JsonToThreeDayForecastPOJO
+    // Purpose: AsyncTask to convert the JSON response to ThreeDayForecastPOJO object
+    // Returns: A ThreeDayForecastPOJO object
+    // Params: args - An array of strings representing the JSON response from the API
     public class JsonToThreeDayForecastPOJO extends AsyncTask<String, Void, ThreeDayForecastPOJO> {
+        // Name: doInBackground (in JsonToThreeDayForecastPOJO)
+        // Purpose: Converts the JSON response to a ThreeDayForecastPOJO object in the background
+        // Params: args - An array of strings representing the JSON response from the API
+        // Returns: A ThreeDayForecastPOJO object
         @Override
         protected ThreeDayForecastPOJO doInBackground (String... args) {
             Gson gson = new Gson();
@@ -286,7 +311,9 @@ public class MainActivity extends AppCompatActivity{
             }
             return threeDayForecastPOJO;
         }
-
+        // Name: onPostExecute (in JsonToThreeDayForecastPOJO)
+        // Purpose: Processes the converted ThreeDayForecastPOJO object and initializes the RecyclerView
+        // Params: threeDayForecast - The ThreeDayForecastPOJO object containing weather data
         @Override
         protected void onPostExecute(ThreeDayForecastPOJO threeDayForecast) {
             super.onPostExecute(threeDayForecast);
