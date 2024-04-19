@@ -65,7 +65,7 @@ public class MainActivity extends AppCompatActivity{
 
 
         //API call to get weather data and initialize recycler view
-        String weatherLocation = "Toronto"; //TODO replace with lat/long for current location
+        String weatherLocation = "43.4643,-80.5204"; //Lat long for Waterloo, ON
         new GetThreeDayForecastTask().execute(weatherLocation);
 
         setBtn();
