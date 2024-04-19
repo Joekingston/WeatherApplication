@@ -183,17 +183,23 @@ public class Tomorrow extends AppCompatActivity {
             Day tomorrow = tomorrowForecast.getDay();
 
 
-            tempTomorrowTextView.setText(String.valueOf(threeDayForecastPOJO.getForecast().getForecastday().get(1).getDay().getAvgtempC())+"°");
+            tempTomorrowTextView.setText(String.valueOf(threeDayForecastPOJO.getForecast().getForecastday().get(1).getDay().getAvgtempC()));
             conditionTextView.setText(String.valueOf(threeDayForecastPOJO.getForecast().getForecastday().get(1).getDay().getCondition().getText()));
-            rainAmountTextView.setText(String.format("%s mm", threeDayForecastPOJO.getForecast().getForecastday().get(1).getDay().getTotalprecipMm()));
-            windAmountTextView.setText(String.format("%s km/h", threeDayForecastPOJO.getForecast().getForecastday().get(1).getDay().getMaxwindKph()));
-            humidityAmountTextView.setText(String.format("%s%%", threeDayForecastPOJO.getForecast().getForecastday().get(1).getDay().getAvghumidity()));
+            rainAmountTextView.setText(String.valueOf(threeDayForecastPOJO.getForecast().getForecastday().get(1).getDay().getTotalprecipMm()));
+            windAmountTextView.setText(String.valueOf(threeDayForecastPOJO.getForecast().getForecastday().get(1).getDay().getMaxwindKph()));
+            humidityAmountTextView.setText(String.valueOf(threeDayForecastPOJO.getForecast().getForecastday().get(1).getDay().getAvghumidity()));
+
         }
 
 
-        //Add weather to recycler view for the rest of the week
+
+        //TODO add error handling in the event that threeDayForecastPOJO is null (i.e. the API call fails)
+
+
+        //use api to get
+        //examples below next 3 days (day after tomorrow and forwards)
         for (int i = 2; i < threeDayForecastPOJO.getForecast().getForecastday().size(); i++) {
-            String itemDay = threeDayForecastPOJO.getForecast().getForecastday().get(i).getDate();
+            String itemDay = threeDayForecastPOJO.getForecast().getForecastday().get(i).getDate(); //TODO parse out day of week from
             String dayOfWeek = UtilityFuncs.ConvertDateToDayOfWeek(itemDay);
 
             //get weather code
