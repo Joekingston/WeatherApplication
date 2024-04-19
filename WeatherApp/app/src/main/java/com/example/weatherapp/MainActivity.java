@@ -1,5 +1,12 @@
 package com.example.weatherapp;
-
+/*
+ *  Filename: MainActivity.java
+ *  Project: Final Mobile Project
+ *  By: Dario Simpson 8819457, Francis Knowles 6939730, Joseph Carson 8213035
+ *  Date: April 19, 2024
+ *  Description: The `MainActivity` class serves as the core component of a weather app, handling the display of current weather information,
+ *  initializing RecyclerView for hourly forecasts, and managing API calls to retrieve weather data.
+  */
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.AsyncTask;

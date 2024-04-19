@@ -1,4 +1,12 @@
 package com.example.weatherapp;
+/*
+ *  Filename: Tomorrow.java
+ *  Project: Final Mobile Project
+ *  By: Dario Simpson 8819457, Francis Knowles 6939730, Joseph Carson 8213035
+ *  Date: April 19, 2024
+ *  Description:The `Tomorrow` class manages the display of weather forecast information for the next few days,
+ *  including initializing views for tomorrow's weather, handling API calls to retrieve forecast data, and setting up RecyclerView to display the forecasted weather conditions.
+  */
 
 import android.content.Intent;
 import android.os.AsyncTask;
