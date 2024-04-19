@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -33,6 +34,7 @@ public class MainActivity extends AppCompatActivity{
 
 
     //This is where we need to put the information from the api
+    private ImageView weatherCondition;
     private TextView dateTextView; //current date we can include time here as well
     private TextView weatherTypeTextView; // weather condition
     private TextView tempTextView; //current temp
@@ -54,7 +56,7 @@ public class MainActivity extends AppCompatActivity{
         rainAmountTextView = findViewById(R.id.rain_amount);
         windAmountTextView = findViewById(R.id.wind_amount);
         humidityAmountTextView = findViewById(R.id.humidity_amount);
-
+        weatherCondition = findViewById(R.id.imageView);
         //get location
 
 
@@ -158,7 +160,9 @@ public class MainActivity extends AppCompatActivity{
             humidityAmountTextView.setText(String.format("%s%%", (threeDayForecastPOJO.getCurrent().getHumidity())));
             rainAmountTextView.setText(String.format("%s mm", (threeDayForecastPOJO.getCurrent().getPrecipMm())));
             windAmountTextView.setText(String.format("%s km/h", (threeDayForecastPOJO.getCurrent().getWindKph())));
-
+            String weatherCode = setCondition(threeDayForecastPOJO.getForecast().getForecastday().get(0).getDay().getCondition().getCode());
+            int resourceId = getResources().getIdentifier(weatherCode, "drawable", getPackageName());
+            weatherCondition.setImageResource(resourceId);
             Double maxTemp = threeDayForecastPOJO.getForecast().getForecastday().get(0).getDay().getMaxtempC();
             Double minTemp = threeDayForecastPOJO.getForecast().getForecastday().get(0).getDay().getMintempC();
             tempLowHighTextView.setText(String.format("H:%.0f L:%.0f", maxTemp, minTemp));
@@ -168,7 +172,7 @@ public class MainActivity extends AppCompatActivity{
                 String itemHour = threeDayForecastPOJO.getForecast().getForecastday().get(0).getHour().get(i).getTime();
                 Double itemTemp = threeDayForecastPOJO.getForecast().getForecastday().get(0).getHour().get(i).getTempC();
                 //TODO get weather code
-                String weatherCode = setCondition(threeDayForecastPOJO.getForecast().getForecastday().get(0).getDay().getCondition().getCode());
+                weatherCode = setCondition(threeDayForecastPOJO.getForecast().getForecastday().get(0).getDay().getCondition().getCode());
                 items.add(new Hourly(itemHour, itemTemp.intValue(), weatherCode));
             }
 
