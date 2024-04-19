@@ -194,12 +194,15 @@ public class MainActivity extends AppCompatActivity{
                 Double minTemp = threeDayForecastPOJO.getForecast().getForecastday().get(0).getDay().getMintempC();
                 tempLowHighTextView.setText(String.format("H:%.0f L:%.0f", maxTemp, minTemp));
                 startIndex++;
-                for (int i = startIndex; i < threeDayForecastPOJO.getForecast().getForecastday().get(0).getHour().size(); i++) {
-                    String itemHour = threeDayForecastPOJO.getForecast().getForecastday().get(0).getHour().get(i).getTime();
-                    Double itemTemp = threeDayForecastPOJO.getForecast().getForecastday().get(0).getHour().get(i).getTempC();
+                int j = 0;
+                for (int i = 0; i < 5; i++) {
+                    if (startIndex > 24) j = 1;
+                    String itemHour = threeDayForecastPOJO.getForecast().getForecastday().get(j).getHour().get(startIndex).getTime();
+                    Double itemTemp = threeDayForecastPOJO.getForecast().getForecastday().get(j).getHour().get(startIndex).getTempC();
                     //TODO get weather code
-                    weatherCode = setCondition(threeDayForecastPOJO.getForecast().getForecastday().get(0).getDay().getCondition().getCode());
+                    weatherCode = setCondition(threeDayForecastPOJO.getForecast().getForecastday().get(j).getDay().getCondition().getCode());
                     items.add(new Hourly(itemHour, itemTemp.intValue(), weatherCode));
+                    startIndex++;
                 }
             }
 
