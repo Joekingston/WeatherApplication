@@ -144,7 +144,7 @@
                             android:id="@+id/wind_amount"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="10 km/h"
+                            android:text=""
                             android:textAlignment="center"
                             android:textColor="@color/white" />
 
@@ -174,7 +174,7 @@
                             android:id="@+id/humidity_amount"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="60%"
+                            android:text=""
                             android:textAlignment="center"
                             android:textColor="@color/white" />
 

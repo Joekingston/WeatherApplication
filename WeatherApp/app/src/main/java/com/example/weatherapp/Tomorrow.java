@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -15,6 +16,9 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.weatherapp.hourlyForecast.HourlyForecastPOJO;
+import com.example.weatherapp.threeDayForecast.Day;
+import com.example.weatherapp.threeDayForecast.Forecast;
+import com.example.weatherapp.threeDayForecast.Forecastday;
 import com.example.weatherapp.threeDayForecast.ThreeDayForecastPOJO;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -27,6 +31,7 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Locale;
 
 public class Tomorrow extends AppCompatActivity {
     private RecyclerView.Adapter adapterTomorrow;
@@ -51,8 +56,10 @@ public class Tomorrow extends AppCompatActivity {
         setContentView(R.layout.activity_tomorrow);
 
         //API call to get weather data and initialize recycler view
-        String weatherLocation = "London"; //TODO replace with lat/long for current location
+        String weatherLocation = "Lima"; //TODO replace with lat/long for current location
         new GetThreeDayForecastTask().execute(weatherLocation);
+
+        setTomorrow();
 
         setBtn();
 
@@ -68,6 +75,8 @@ public class Tomorrow extends AppCompatActivity {
 
         });
     }
+
+
 
     //this will also need to be set as the first day after current aka tomorrow, remove any extra days from recycler view that you cannot fill,
     // or keep them as an example of what it could be. you can move this into initRecycler or whatever
@@ -86,8 +95,6 @@ public class Tomorrow extends AppCompatActivity {
 
         humidityAmountTextView = findViewById(R.id.humidity_amount);
         humidityTextView = findViewById(R.id.humidity);
-
-
 
     }
 
@@ -108,12 +115,21 @@ public class Tomorrow extends AppCompatActivity {
         //Assuming initRecyclerView is called from the onPostExecute method of GetThreeDayForecastTask, this value will be null
         //if creation of the POJO failed.
         if (threeDayForecastPOJO != null) {
+            // Extract the forecast object
+            Forecast forecast = threeDayForecastPOJO.getForecast();
 
-            //TODO this is where we set values for the weather in this activity
+            Forecastday tomorrowForecast = forecast.getForecastday().get(1);
+            Day tomorrow = tomorrowForecast.getDay();
 
 
+            tempTomorrowTextView.setText(String.valueOf(threeDayForecastPOJO.getForecast().getForecastday().get(1).getDay().getAvgtempC()));
+            conditionTextView.setText(String.valueOf(threeDayForecastPOJO.getForecast().getForecastday().get(1).getDay().getCondition().getText()));
+            rainAmountTextView.setText(String.valueOf(threeDayForecastPOJO.getForecast().getForecastday().get(1).getDay().getTotalprecipMm()));
+            windAmountTextView.setText(String.valueOf(threeDayForecastPOJO.getForecast().getForecastday().get(1).getDay().getMaxwindKph()));
+            humidityAmountTextView.setText(String.valueOf(threeDayForecastPOJO.getForecast().getForecastday().get(1).getDay().getAvghumidity()));
 
         }
+
 
 
         //TODO add error handling in the event that threeDayForecastPOJO is null (i.e. the API call fails)
