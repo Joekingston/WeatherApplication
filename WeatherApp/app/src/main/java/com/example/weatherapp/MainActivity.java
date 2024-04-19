@@ -85,7 +85,7 @@ public class MainActivity extends AppCompatActivity{
         ArrayList<Hourly> items=new ArrayList<>();
         //use api to get hour temp and condition which will be used for the appropriate image
 
-        //Assuming initRecyclerView is called from the onPostExecute method, this value will be null
+        //Assuming initRecyclerView is called from the onPostExecute method of GetHourlyForecastTask, this value will be null
         //if creation of the POJO failed.
         if (hourlyForecastPOJO != null) {
 
