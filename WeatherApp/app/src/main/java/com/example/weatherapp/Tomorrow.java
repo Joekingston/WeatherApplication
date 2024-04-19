@@ -30,6 +30,7 @@ import java.lang.reflect.Type;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Locale;
 
@@ -159,7 +160,7 @@ public class Tomorrow extends AppCompatActivity {
 
     }
 // recycler view allows to dynamically create objects onto the display.
-    private void initRecyclerView(ThreeDayForecastPOJO threeDayForecastPOJO) {
+    private void initRecyclerView(ThreeDayForecastPOJO threeDayForecastPOJO) throws ParseException {
 
         // you can put the api for the dynamic view here. if you prefer to use multiple strings instead of arrays feel free.
         // these are just examples to show
@@ -197,6 +198,14 @@ public class Tomorrow extends AppCompatActivity {
 
         //use api to get
         //examples below next 3 days (day after tomorrow and forwards)
+        for (int i = 0; i < threeDayForecastPOJO.getForecast().getForecastday().size(); i++) {
+            String itemDay = threeDayForecastPOJO.getForecast().getForecastday().get(i).getDate(); //TODO parse out day of week from
+            String dayOfWeek = UtilityFuncs.ConvertDateToDayOfWeek(itemDay);
+        }
+
+
+
+
         items.add(new TomorrowSetting("Sat", "storm","Stormy",28, 24)); // these two would need values replaced.
         items.add(new TomorrowSetting("Sun", "cloudy","EXAMPLE",22, 21));
 
