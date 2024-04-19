@@ -183,12 +183,14 @@ public class Tomorrow extends AppCompatActivity {
             Day tomorrow = tomorrowForecast.getDay();
 
 
-            tempTomorrowTextView.setText(String.valueOf(threeDayForecastPOJO.getForecast().getForecastday().get(1).getDay().getAvgtempC()));
+            tempTomorrowTextView.setText(String.valueOf(threeDayForecastPOJO.getForecast().getForecastday().get(1).getDay().getAvgtempC())+"°");
             conditionTextView.setText(String.valueOf(threeDayForecastPOJO.getForecast().getForecastday().get(1).getDay().getCondition().getText()));
-            rainAmountTextView.setText(String.valueOf(threeDayForecastPOJO.getForecast().getForecastday().get(1).getDay().getTotalprecipMm()));
-            windAmountTextView.setText(String.valueOf(threeDayForecastPOJO.getForecast().getForecastday().get(1).getDay().getMaxwindKph()));
-            humidityAmountTextView.setText(String.valueOf(threeDayForecastPOJO.getForecast().getForecastday().get(1).getDay().getAvghumidity()));
-
+            rainAmountTextView.setText(String.valueOf(threeDayForecastPOJO.getForecast().getForecastday().get(1).getDay().getTotalprecipMm())+" mm");
+            windAmountTextView.setText(String.valueOf(threeDayForecastPOJO.getForecast().getForecastday().get(1).getDay().getMaxwindKph())+" km/h");
+            humidityAmountTextView.setText(String.valueOf(threeDayForecastPOJO.getForecast().getForecastday().get(1).getDay().getAvghumidity())+"%");
+            String weatherCode = setCondition(threeDayForecastPOJO.getForecast().getForecastday().get(1).getDay().getCondition().getCode());
+            int resourceId = getResources().getIdentifier(weatherCode, "drawable", getPackageName());
+            weatherCondition.setImageResource(resourceId);
         }
 
 
@@ -207,13 +209,15 @@ public class Tomorrow extends AppCompatActivity {
 
             Double maxTemp = threeDayForecastPOJO.getForecast().getForecastday().get(i).getDay().getMaxtempC();
             Double minTemp = threeDayForecastPOJO.getForecast().getForecastday().get(i).getDay().getMintempC();
-            items.add(new TomorrowSetting(itemDay, weatherCode, weatherCode, maxTemp.intValue(), minTemp.intValue()));
+            items.add(new TomorrowSetting(itemDay, weatherCode, "cloudy", maxTemp.intValue(), minTemp.intValue()));
         }
 
         //Hardcoded filler items
-        items.add(new TomorrowSetting("2024-04-22", "cloudy","cloudy",22, 21));
-        items.add(new TomorrowSetting("2024-04-23", "storm","storm",25, 24)); // this can be kept in to fill space and make app
-
+        items.add(new TomorrowSetting("2024-04-22", "cloudy","example",22, 21));
+        items.add(new TomorrowSetting("2024-04-23", "storm","example",25, 24)); // this can be kept in to fill space and make app
+        items.add(new TomorrowSetting("2024-04-24", "windy","example",22, 21));
+        items.add(new TomorrowSetting("2024-04-25", "sunny","example",25, 24));
+        items.add(new TomorrowSetting("2024-04-26", "rainy","example",25, 24));
 
         recyclerView=findViewById(R.id.view2);
         recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)); // vertical allows for stacking of elements
