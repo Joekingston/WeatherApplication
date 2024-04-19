@@ -194,12 +194,16 @@ public class MainActivity extends AppCompatActivity{
                 Double minTemp = threeDayForecastPOJO.getForecast().getForecastday().get(0).getDay().getMintempC();
                 tempLowHighTextView.setText(String.format("H:%.0f L:%.0f", maxTemp, minTemp));
                 startIndex++;
+                //startIndex = 23;
                 int j = 0;
                 for (int i = 0; i < 5; i++) {
-                    if (startIndex > 24) j = 1;
+                    if (startIndex > 23) {
+                        j = 1;
+                        startIndex = 0;
+                    }
                     String itemHour = threeDayForecastPOJO.getForecast().getForecastday().get(j).getHour().get(startIndex).getTime();
                     Double itemTemp = threeDayForecastPOJO.getForecast().getForecastday().get(j).getHour().get(startIndex).getTempC();
-                    //TODO get weather code
+
                     weatherCode = setCondition(threeDayForecastPOJO.getForecast().getForecastday().get(j).getDay().getCondition().getCode());
                     items.add(new Hourly(itemHour, itemTemp.intValue(), weatherCode));
                     startIndex++;
@@ -208,7 +212,7 @@ public class MainActivity extends AppCompatActivity{
 
         }
 
-        //TODO add error handling in the event that hourlyForecastPOJO is null (i.e. the API call fails)
+
 
 
         recyclerView=findViewById(R.id.hourlyView);

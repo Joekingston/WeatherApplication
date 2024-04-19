@@ -206,10 +206,10 @@ public class Tomorrow extends AppCompatActivity {
 
             //get weather code
             String weatherCode = setCondition(threeDayForecastPOJO.getForecast().getForecastday().get(i).getDay().getCondition().getCode());
-
+            String weather = threeDayForecastPOJO.getForecast().getForecastday().get(i).getDay().getCondition().getText();
             Double maxTemp = threeDayForecastPOJO.getForecast().getForecastday().get(i).getDay().getMaxtempC();
             Double minTemp = threeDayForecastPOJO.getForecast().getForecastday().get(i).getDay().getMintempC();
-            items.add(new TomorrowSetting(itemDay, weatherCode, "cloudy", maxTemp.intValue(), minTemp.intValue()));
+            items.add(new TomorrowSetting(itemDay, weatherCode, weather, maxTemp.intValue(), minTemp.intValue()));
         }
 
         //Hardcoded filler items
