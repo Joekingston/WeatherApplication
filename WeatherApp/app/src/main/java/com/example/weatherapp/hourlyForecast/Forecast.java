@@ -1,4 +1,3 @@
-
 package com.example.weatherapp.hourlyForecast;
 
 import java.util.LinkedHashMap;
@@ -6,7 +5,6 @@ import java.util.List;
 import java.util.Map;
 
 public class Forecast {
-
     private List<Forecastday> forecastday;
     private Map<String, Object> additionalProperties = new LinkedHashMap<String, Object>();
 

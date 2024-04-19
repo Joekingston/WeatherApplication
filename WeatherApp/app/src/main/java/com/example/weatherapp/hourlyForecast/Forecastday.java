@@ -1,10 +1,8 @@
-
 package com.example.weatherapp.hourlyForecast;
 
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-
 public class Forecastday {
 
     private String date;

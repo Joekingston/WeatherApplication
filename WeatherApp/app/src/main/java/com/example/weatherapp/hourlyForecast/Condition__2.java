@@ -1,4 +1,3 @@
-
 package com.example.weatherapp.hourlyForecast;
 
 import java.util.LinkedHashMap;
@@ -42,5 +41,4 @@ public class Condition__2 {
     public void setAdditionalProperty(String name, Object value) {
         this.additionalProperties.put(name, value);
     }
-
 }

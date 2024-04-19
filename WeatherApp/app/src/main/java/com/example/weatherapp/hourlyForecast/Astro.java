@@ -1,11 +1,8 @@
-
 package com.example.weatherapp.hourlyForecast;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
-
 public class Astro {
-
     private String sunrise;
     private String sunset;
     private String moonrise;
@@ -69,5 +66,4 @@ public class Astro {
     public void setAdditionalProperty(String name, Object value) {
         this.additionalProperties.put(name, value);
     }
-
 }

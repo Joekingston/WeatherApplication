@@ -1,9 +1,8 @@
-
 package com.example.weatherapp.hourlyForecast;
+
 
 import java.util.LinkedHashMap;
 import java.util.Map;
-
 public class Current {
 
     private Integer lastUpdatedEpoch;

@@ -1,11 +1,8 @@
-
 package com.example.weatherapp.hourlyForecast;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
-
 public class Hour {
-
     private Integer timeEpoch;
     private String time;
     private Double tempC;
@@ -312,5 +309,4 @@ public class Hour {
     public void setAdditionalProperty(String name, Object value) {
         this.additionalProperties.put(name, value);
     }
-
 }

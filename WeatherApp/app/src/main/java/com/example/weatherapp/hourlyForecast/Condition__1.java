@@ -1,9 +1,7 @@
-
 package com.example.weatherapp.hourlyForecast;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
-
 public class Condition__1 {
 
     private String text;

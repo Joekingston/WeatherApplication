@@ -1,9 +1,7 @@
-
 package com.example.weatherapp.hourlyForecast;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
-
 public class HourlyForecastPOJO {
 
     private Location location;

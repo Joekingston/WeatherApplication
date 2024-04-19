@@ -1,9 +1,7 @@
-
 package com.example.weatherapp.hourlyForecast;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
-
 public class Location {
 
     private String name;
@@ -87,5 +85,4 @@ public class Location {
     public void setAdditionalProperty(String name, Object value) {
         this.additionalProperties.put(name, value);
     }
-
 }
